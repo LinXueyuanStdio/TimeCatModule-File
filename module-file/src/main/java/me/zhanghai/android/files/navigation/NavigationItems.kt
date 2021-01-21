@@ -19,17 +19,8 @@ import java8.nio.file.Paths
 import me.zhanghai.android.files.R
 import me.zhanghai.android.files.about.AboutActivity
 import me.zhanghai.android.files.app.storageManager
-import me.zhanghai.android.files.compat.DocumentsContractCompat
-import me.zhanghai.android.files.compat.createOpenDocumentTreeIntentCompat
-import me.zhanghai.android.files.compat.getDescriptionCompat
-import me.zhanghai.android.files.compat.isPrimaryCompat
-import me.zhanghai.android.files.compat.pathCompat
-import me.zhanghai.android.files.compat.storageVolumesCompat
-import me.zhanghai.android.files.file.DocumentTreeUri
-import me.zhanghai.android.files.file.JavaFile
-import me.zhanghai.android.files.file.asDocumentTreeUri
-import me.zhanghai.android.files.file.asFileSize
-import me.zhanghai.android.files.file.displayNameOrUri
+import me.zhanghai.android.files.compat.*
+import me.zhanghai.android.files.file.*
 import me.zhanghai.android.files.ftpserver.FtpServerActivity
 import me.zhanghai.android.files.provider.document.createDocumentTreeRootPath
 import me.zhanghai.android.files.settings.Settings
@@ -37,7 +28,7 @@ import me.zhanghai.android.files.settings.SettingsActivity
 import me.zhanghai.android.files.util.createIntent
 import me.zhanghai.android.files.util.getParcelableExtraSafe
 import me.zhanghai.android.files.util.valueCompat
-import java.util.Objects
+import java.util.*
 
 val navigationItems: List<NavigationItem?>
     get() =
@@ -55,6 +46,48 @@ val navigationItems: List<NavigationItem?>
             }
             add(null)
             addAll(menuItems)
+        }
+
+val navigationFileItems: List<FileItem>
+    get() =
+        mutableListOf<FileItem>().apply {
+            //root
+            add(RootDirectoryRootItem())
+            val storageVolumes = storageManager.storageVolumesCompat
+            for (storageVolume in storageVolumes) {
+                if (storageVolume.isPrimaryCompat) {
+                    add(PrimaryStorageVolumeRootItem(storageVolume))
+                }
+            }
+            val treeUris = DocumentTreesLiveData.valueCompat.toMutableList()
+            for (storageVolume in storageVolumes) {
+                if (storageVolume.isPrimaryCompat) {
+                    continue
+                }
+                val treeUri = getStorageVolumeTreeUri(storageVolume)
+                if (treeUris.remove(treeUri)) {
+                    add(DocumentTreeStorageVolumeRootItem(treeUri, storageVolume))
+                }
+            }
+            for (treeUri in treeUris) {
+                add(DocumentTreeRootItem(treeUri))
+            }
+
+            //standardDirectory
+            val standardDirectoryItems = StandardDirectoriesLiveData.valueCompat
+                .filter { it.isEnabled }
+                .map { StandardDirectoryItem(it) }
+            if (standardDirectoryItems.isNotEmpty()) {
+                addAll(standardDirectoryItems)
+            }
+
+            //bookmarkDirectory
+            val bookmarkDirectoryItems = Settings.BOOKMARK_DIRECTORIES.valueCompat.map {
+                BookmarkDirectoryItem(it)
+            }
+            if (bookmarkDirectoryItems.isNotEmpty()) {
+                addAll(bookmarkDirectoryItems)
+            }
         }
 
 private val rootItems: List<NavigationItem>
@@ -84,7 +117,7 @@ private val rootItems: List<NavigationItem>
             add(AddDocumentTreeItem())
         }
 
-private abstract class FileItem(val path: Path) : NavigationItem() {
+abstract class FileItem(val path: Path) : NavigationItem() {
     // Items of different types may point to the same file.
     override val id: Long = Objects.hash(javaClass, path).toLong()
 

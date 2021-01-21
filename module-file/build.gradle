@@ -1,8 +1,5 @@
 apply from: "${project.rootDir}/gradle/library_header.gradle"
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
 //kapt {
 //    correctErrorTypes = true
 //}

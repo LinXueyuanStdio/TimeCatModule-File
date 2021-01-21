@@ -17,9 +17,7 @@ class MainActivity : Activity() {
         val linearLayout = LinearLayout(this)
         linearLayout.orientation = LinearLayout.VERTICAL
         linearLayout.addView(createButton("登录", RouterHub.LOGIN_LoginActivity))
-        linearLayout.addView(createButton("添加插件", RouterHub.USER_AddPluginAppActivity))
-        linearLayout.addView(createButton("添加动态", RouterHub.USER_AddMomentActivity))
-        linearLayout.addView(createButton("背包", RouterHub.USER_BagActivity))
+        linearLayout.addView(createButton("File", RouterHub.FILES_FilesActivity))
         setContentView(linearLayout)
     }
 

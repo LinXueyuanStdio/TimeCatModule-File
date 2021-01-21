@@ -147,7 +147,7 @@ class FilesFragment : BaseLazyLoadSupportFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val origin = requireContext()
         val contextThemeWrapper: Context = ContextThemeWrapper(origin, origin.theme)
         val themeAwareInflater = inflater.cloneInContext(contextThemeWrapper)
