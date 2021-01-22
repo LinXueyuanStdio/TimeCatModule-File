@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.timecat.component.commonsdk.utils.override.LogUtil
 import com.timecat.component.identity.Attr
 import com.timecat.layout.ui.entity.BaseAdapter
 import com.timecat.layout.ui.entity.BaseItem
@@ -13,7 +14,9 @@ import com.timecat.layout.ui.layout.setShakelessClickListener
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import me.zhanghai.android.files.R
+import me.zhanghai.android.files.filelist.userFriendlyString
 import me.zhanghai.android.files.navigation.FileItem
+import java.util.*
 
 /**
  * @author 林学渊
@@ -26,7 +29,7 @@ class NavigationCard(
     val fileItem: FileItem,
     val context: Context,
     val listener: Listener
-) : BaseItem<NavigationCard.NavigationCardVH>(fileItem.id.toString()) {
+) : BaseItem<NavigationCard.NavigationCardVH>(fileItem.path.userFriendlyString) {
     class NavigationCardVH(v: View, adapter: FlexibleAdapter<*>) : AbsCardVH(v, adapter) {
         var title: AppCompatTextView = v.findViewById(R.id.title)
         var mTimerState: TextView = v.findViewById(R.id.state)
@@ -58,7 +61,7 @@ class NavigationCard(
 
         val selected = adapter.isSelected(position)
         val icon = fileItem.getIcon(context)
-        val color = Attr.getPrimaryColor(context)
+        val color = Attr.getAccentColor(context)
         holder.bindSelected(context, selected, icon, color)
         val drawable = Attr.tintDrawable(context, R.drawable.shape_rect_accent, color)
         holder.mHint.background = drawable

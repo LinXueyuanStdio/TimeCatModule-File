@@ -63,21 +63,30 @@ class FileContainerService : ContainerService {
 
     private fun loadForFileDir(context: Context, parentUuid: Path, homeService: HomeService, callback: ContainerService.LoadCallback) {
         GlobalScope.launch(Dispatchers.IO) {
-            val fileList = mutableListOf<me.zhanghai.android.files.file.FileItem>()
-            try {
-                parentUuid.newDirectoryStream().forEach { path ->
-                    try {
-                        fileList.add(path.loadFileItem())
-                    } catch (e: DirectoryIteratorException) {
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
+            val fileList = try {
+                parentUuid.newDirectoryStream().use { directoryStream ->
+                    val fileList = mutableListOf<me.zhanghai.android.files.file.FileItem>()
+                    for (path in directoryStream) {
+                        try {
+                            fileList.add(path.loadFileItem())
+                        } catch (e: DirectoryIteratorException) {
+                            e.printStackTrace()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
+                    fileList
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    val stateful = homeService.statefulView()
+                    stateful?.showError(e.message) {
+                        homeService.databaseReload()
+                    }
+                }
+                return@launch
             }
-            val fileCards = fileList.map {
+            val fileCards = fileList.sortedByDescending { it.attributes.isDirectory }.map {
                 if (it.attributes.isDirectory)
                     DirCard(it, context, object : DirCard.Listener {
                         override fun loadFor(fileItem: me.zhanghai.android.files.file.FileItem) {
@@ -92,9 +101,7 @@ class FileContainerService : ContainerService {
                         }
                     })
             }
-            withContext(Dispatchers.Main) {
-                callback.onVirtualLoadSuccess(fileCards)
-            }
+            callback.onVirtualLoadSuccess(fileCards)
         }
     }
 

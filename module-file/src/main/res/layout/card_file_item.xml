@@ -59,13 +59,17 @@
 
     <TextView
         android:id="@+id/event_timer_state"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_smaller"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:paddingTop="@dimen/spacing_micro"
+        android:singleLine="true"
         android:text="12:20"
-        android:textColor="@color/master_textColorPrimary"
+        android:textColor="@color/master_textColorSecondary"
         android:textSize="@dimen/vm_size_12"
+        app:layout_constraintEnd_toStartOf="@id/delay"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -105,11 +109,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:paddingStart="@dimen/margin_small"
+        android:paddingEnd="@dimen/margin_small"
         android:text="笔记"
         android:textColor="@color/master_textColorSecondary"
         android:textSize="@dimen/font_size_xsmall"
         app:layout_constraintEnd_toEndOf="@id/more"
-        app:layout_constraintStart_toStartOf="@id/more"
         app:layout_constraintTop_toBottomOf="@id/more" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.timecat.component.commonsdk.utils.override.LogUtil
 import com.timecat.component.identity.Attr
 import com.timecat.layout.ui.entity.BaseAdapter
 import com.timecat.layout.ui.entity.BaseItem
@@ -20,6 +21,7 @@ import me.zhanghai.android.files.file.formatShort
 import me.zhanghai.android.files.file.iconRes
 import me.zhanghai.android.files.filelist.name
 import me.zhanghai.android.files.filelist.userFriendlyString
+import java.util.*
 
 /**
  * @author 林学渊
@@ -62,17 +64,19 @@ class FileCard(
         }
         val selected = adapter.isSelected(position)
         val icon = context.getDrawableCompat(fileItem.mimeType.iconRes)
-        val color = Attr.getPrimaryColor(context)
+        val color = Attr.getBackgroundDarkColor(context)
         holder.bindSelected(context, selected, icon, color)
 
         holder.title.text = fileItem.name
         val attributes = fileItem.attributes
-        val lastModificationTime = attributes.lastModifiedTime().toInstant()
-            .formatShort(context)
+        val lastModificationTime = attributes.lastModifiedTime().toInstant().formatShort(context)
         val size = attributes.fileSize.formatHumanReadable(context)
         val descriptionSeparator = context.getString(R.string.file_item_description_separator)
-        holder.mTimerState.text = listOf(lastModificationTime, size).joinToString(descriptionSeparator)
-        holder.mState.text = fileItem.mimeType.value
+        holder.mTimerState.text = listOf(
+            lastModificationTime,
+            fileItem.mimeType.value
+        ).joinToString(descriptionSeparator)
+        holder.mState.text = size
 
         holder.frontView.setShakelessClickListener {
             listener.open(fileItem)

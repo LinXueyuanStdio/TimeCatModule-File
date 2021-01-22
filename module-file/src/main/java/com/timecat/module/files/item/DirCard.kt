@@ -6,13 +6,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.timecat.component.commonsdk.utils.override.LogUtil
 import com.timecat.component.identity.Attr
 import com.timecat.layout.ui.entity.BaseAdapter
 import com.timecat.layout.ui.entity.BaseItem
 import com.timecat.layout.ui.layout.setShakelessClickListener
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
-import eu.davidea.viewholders.FlexibleViewHolder
 import me.zhanghai.android.files.R
 import me.zhanghai.android.files.compat.getDrawableCompat
 import me.zhanghai.android.files.file.FileItem
@@ -51,7 +51,7 @@ class DirCard(
         fun loadFor(fileItem: FileItem)
     }
 
-    override fun getLayoutRes(): Int = R.layout.card_file_navigation
+    override fun getLayoutRes(): Int = R.layout.card_file_dir
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>): DirCardVH {
         return DirCardVH(view, adapter)
@@ -63,7 +63,7 @@ class DirCard(
         }
         val selected = adapter.isSelected(position)
         val icon = context.getDrawableCompat(fileItem.mimeType.iconRes)
-        val color = Attr.getPrimaryColor(context)
+        val color = Attr.getBackgroundDarkColor(context)
         holder.bindSelected(context, selected, icon, color)
         val drawable = Attr.tintDrawable(context, R.drawable.shape_rect_accent, color)
         holder.mHint.background = drawable
