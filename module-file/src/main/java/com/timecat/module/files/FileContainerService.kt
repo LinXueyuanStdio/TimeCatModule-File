@@ -86,7 +86,10 @@ class FileContainerService : ContainerService {
                 }
                 return@launch
             }
-            val fileCards = fileList.sortedByDescending { it.attributes.isDirectory }.map {
+            val fileCards = fileList.sortedWith(compareBy(
+                { !it.attributes.isDirectory },
+                { it.name },
+            )).map {
                 if (it.attributes.isDirectory)
                     DirCard(it, context, object : DirCard.Listener {
                         override fun loadFor(fileItem: me.zhanghai.android.files.file.FileItem) {
