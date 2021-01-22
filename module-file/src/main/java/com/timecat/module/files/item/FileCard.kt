@@ -37,7 +37,7 @@ class FileCard(
 ) : BaseItem<FileCard.FileCardVH>(fileItem.path.userFriendlyString) {
     class FileCardVH(v: View, adapter: FlexibleAdapter<*>) : AbsCardVH(v, adapter) {
         var title: AppCompatTextView = v.findViewById(R.id.title)
-        var mTimerState: TextView = v.findViewById(R.id.event_timer_state)
+        var mTimerState: TextView = v.findViewById(R.id.state)
         var more: ImageView = v.findViewById(R.id.more)
         var redDot: TextView = v.findViewById(R.id.red_dot_tv)
         var mState: TextView = v.findViewById(R.id.delay)

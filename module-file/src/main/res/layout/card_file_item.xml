@@ -58,7 +58,7 @@
         tools:text="@string/temp" />
 
     <TextView
-        android:id="@+id/event_timer_state"
+        android:id="@+id/state"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_smaller"

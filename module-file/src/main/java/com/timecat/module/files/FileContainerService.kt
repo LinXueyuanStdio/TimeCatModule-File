@@ -88,6 +88,7 @@ class FileContainerService : ContainerService {
             }
             val fileCards = fileList.sortedWith(compareBy(
                 { !it.attributes.isDirectory },
+                { it.mimeType.value },
                 { it.name },
             )).map {
                 if (it.attributes.isDirectory)
