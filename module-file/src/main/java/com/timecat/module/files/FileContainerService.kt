@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.timecat.element.alert.ToastUtil
 import com.timecat.identity.data.block.type.CONTAINER_BLOCK_MEDIA_MODULE_FILE
+import com.timecat.identity.readonly.RouterHub
 import com.timecat.middle.block.service.ContainerService
 import com.timecat.middle.block.service.HomeService
 import com.timecat.module.files.item.DirCard
@@ -50,7 +51,7 @@ private const val FileSchema = "|FILE|"
 private fun Path.toUuid(): Uuid = "${FileSchema}${this.toUri()}"
 private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileSchema)))
 
-@ServiceAnno(ContainerService::class)
+@ServiceAnno(ContainerService::class, name = arrayOf(RouterHub.GLOBAL_FileContainerService))
 class FileContainerService : ContainerService {
     override fun loadForVirtualPath(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
         if (parentUuid.startsWith(FileSchema)) {
