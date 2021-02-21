@@ -51,7 +51,7 @@ private const val FileSchema = "|FILE|"
 private fun Path.toUuid(): Uuid = "${FileSchema}${this.toUri()}"
 private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileSchema)))
 
-@ServiceAnno(ContainerService::class, name = arrayOf(RouterHub.GLOBAL_FileContainerService))
+@ServiceAnno(ContainerService::class, name = [RouterHub.GLOBAL_FileContainerService])
 class FileContainerService : ContainerService {
     override fun loadForVirtualPath(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
         if (parentUuid.startsWith(FileSchema)) {
