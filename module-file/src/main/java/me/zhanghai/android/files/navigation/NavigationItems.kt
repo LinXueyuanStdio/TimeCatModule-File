@@ -59,7 +59,7 @@ val navigationFileItems: List<FileItem>
                     add(PrimaryStorageVolumeRootItem(storageVolume))
                 }
             }
-            val treeUris = DocumentTreesLiveData.valueCompat.toMutableList()
+            val treeUris = DocumentTreeUri.persistedUris.toMutableList()
             for (storageVolume in storageVolumes) {
                 if (storageVolume.isPrimaryCompat) {
                     continue
@@ -74,7 +74,7 @@ val navigationFileItems: List<FileItem>
             }
 
             //standardDirectory
-            val standardDirectoryItems = StandardDirectoriesLiveData.valueCompat
+            val standardDirectoryItems = standardDirectories
                 .filter { it.isEnabled }
                 .map { StandardDirectoryItem(it) }
             if (standardDirectoryItems.isNotEmpty()) {

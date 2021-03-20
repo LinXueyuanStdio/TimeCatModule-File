@@ -258,11 +258,13 @@
             </intent-filter>
         </service>
 
-        <provider
-            android:name="me.zhanghai.android.files.app.AppProvider"
-            android:authorities="${applicationId}.files.app_provider"
-            android:exported="false" />
-
+<!--        <provider-->
+<!--            android:name="me.zhanghai.android.files.app.AppProvider"-->
+<!--            android:authorities="${applicationId}.files.app_provider"-->
+<!--            android:exported="false" />-->
+        <meta-data
+            android:name="com.timecat.module.files.GlobalConfiguration"
+            android:value="ConfigModule" />
         <provider
             android:name="me.zhanghai.android.files.file.FileProvider"
             android:authorities="${applicationId}.files.file_provider"

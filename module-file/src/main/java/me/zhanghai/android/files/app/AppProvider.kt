@@ -13,6 +13,11 @@ import android.net.Uri
 
 lateinit var application: Application private set
 
+fun initApplication(context: Application) {
+    application = context
+    appInitializers.forEach { it() }
+}
+
 class AppProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         application = context as Application

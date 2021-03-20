@@ -11,11 +11,16 @@ import android.graphics.drawable.Drawable
 import android.os.storage.StorageVolume
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.timecat.component.commonsdk.utils.override.LogUtil
 import java8.nio.file.Path
 import me.zhanghai.android.files.compat.getDrawableCompat
 import me.zhanghai.android.files.file.DocumentTreeUri
 
 abstract class NavigationItem {
+    init {
+        LogUtil.se("init NavigationItem")
+
+    }
     abstract val id: Long
 
     fun getIcon(context: Context): Drawable = context.getDrawableCompat(iconRes!!)

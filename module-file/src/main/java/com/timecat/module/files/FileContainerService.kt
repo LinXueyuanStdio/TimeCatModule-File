@@ -3,6 +3,7 @@ package com.timecat.module.files
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import com.timecat.component.commonsdk.utils.override.LogUtil
 import com.timecat.element.alert.ToastUtil
 import com.timecat.identity.data.block.type.CONTAINER_BLOCK_MEDIA_MODULE_FILE
 import com.timecat.identity.readonly.RouterHub
@@ -65,7 +66,9 @@ class FileContainerService : ContainerService {
     private fun loadForFileDir(context: Context, parentUuid: Path, homeService: HomeService, callback: ContainerService.LoadCallback) {
         GlobalScope.launch(Dispatchers.IO) {
             val fileList = try {
+                LogUtil.se("start load files")
                 parentUuid.newDirectoryStream().use { directoryStream ->
+                    LogUtil.se("open files stream")
                     val fileList = mutableListOf<me.zhanghai.android.files.file.FileItem>()
                     for (path in directoryStream) {
                         try {
@@ -74,11 +77,15 @@ class FileContainerService : ContainerService {
                             e.printStackTrace()
                         } catch (e: IOException) {
                             e.printStackTrace()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
+                    LogUtil.se("load files success")
                     fileList
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     val stateful = homeService.statefulView()
                     stateful?.showError(e.message) {
@@ -122,6 +129,7 @@ class FileContainerService : ContainerService {
         if (path.isLinuxPath || path.isDocumentPath) {
             val intent = path.fileProviderUri.createViewIntent(mimeType)
                 .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .apply {
                     extraPath = path
                     maybeAddImageViewerActivityExtras(this, path, fileItems, mimeType)
@@ -130,6 +138,7 @@ class FileContainerService : ContainerService {
                     if (withChooser) {
                         it.withChooser(
                             OpenFileAsDialogActivity::class.createIntent()
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 .putArgs(OpenFileAsDialogFragment.Args(path))
                         )
                     } else {
@@ -168,6 +177,7 @@ class FileContainerService : ContainerService {
         if (position == -1) {
             return
         }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         ImageViewerActivity.putExtras(intent, paths, position)
     }
 

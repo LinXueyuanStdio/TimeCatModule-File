@@ -34,7 +34,7 @@ class DirCard(
     val listener: Listener
 ) : BaseItem<DirCard.DirCardVH>(fileItem.path.userFriendlyString) {
     class DirCardVH(v: View, adapter: FlexibleAdapter<*>) : AbsCardVH(v, adapter) {
-        var title: AppCompatTextView = v.findViewById(R.id.title)
+        var title: TextView = v.findViewById(R.id.title)
         var mTimerState: TextView = v.findViewById(R.id.state)
         var more: ImageView = v.findViewById(R.id.more)
         var redDot: TextView = v.findViewById(R.id.red_dot_tv)
