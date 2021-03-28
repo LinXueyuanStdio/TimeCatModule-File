@@ -54,6 +54,14 @@ private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileS
 
 @ServiceAnno(ContainerService::class, name = [RouterHub.GLOBAL_FileContainerService])
 class FileContainerService : ContainerService {
+    override fun loadContainerButton(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadButton) {
+        callback.onLoadSuccess(listOf())
+    }
+
+    override fun loadMoreForVirtualPath(context: Context, parentUuid: String, offset: Int, homeService: HomeService, callback: ContainerService.LoadMoreCallback) {
+        callback.onVirtualLoadSuccess(listOf())
+    }
+
     override fun loadForVirtualPath(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
         if (parentUuid.startsWith(FileSchema)) {
             val path = parentUuid.toPath()
