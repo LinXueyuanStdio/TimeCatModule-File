@@ -3,12 +3,15 @@ package com.timecat.module.files
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import com.google.android.material.chip.Chip
 import com.timecat.component.commonsdk.utils.override.LogUtil
+import com.timecat.component.router.app.NAV
+import com.timecat.data.room.record.RoomRecord
 import com.timecat.element.alert.ToastUtil
 import com.timecat.identity.data.block.type.CONTAINER_BLOCK_MEDIA_MODULE_FILE
 import com.timecat.identity.readonly.RouterHub
-import com.timecat.middle.block.service.ContainerService
-import com.timecat.middle.block.service.HomeService
+import com.timecat.layout.ui.layout.setShakelessClickListener
+import com.timecat.middle.block.service.*
 import com.timecat.module.files.item.DirCard
 import com.timecat.module.files.item.FileCard
 import com.timecat.module.files.item.NavigationCard
@@ -54,13 +57,27 @@ private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileS
 
 @ServiceAnno(ContainerService::class, name = [RouterHub.GLOBAL_FileContainerService])
 class FileContainerService : ContainerService {
-    override fun loadContainerButton(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadButton) {
-        callback.onLoadSuccess(listOf())
+
+    override fun loadContext(path: com.timecat.layout.ui.business.breadcrumb.Path, context: Context, parentUuid: String, record: RoomRecord?, homeService: HomeService) {
+        homeService.loadMenu(EmptyMenuContext())
+        homeService.loadHeader(listOf())
+        homeService.loadChipType(listOf())
+        homeService.loadPanel(EmptyPanelContext())
+        homeService.loadChipButtons(listOf(Chip(context).apply {
+            text = "文件管理页"
+            setShakelessClickListener {
+                NAV.go(RouterHub.FILES_FilesActivity)
+            }
+        }))
+        homeService.loadCommand(EmptyCommandContext())
+        homeService.loadInputSend(EmptyInputContext())
+        homeService.reloadData()
     }
 
     override fun loadMoreForVirtualPath(context: Context, parentUuid: String, offset: Int, homeService: HomeService, callback: ContainerService.LoadMoreCallback) {
         callback.onVirtualLoadSuccess(listOf())
     }
+
 
     override fun loadForVirtualPath(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
         if (parentUuid.startsWith(FileSchema)) {
@@ -97,7 +114,7 @@ class FileContainerService : ContainerService {
                 withContext(Dispatchers.Main) {
                     val stateful = homeService.statefulView()
                     stateful?.showError(e.message) {
-                        homeService.databaseReload()
+                        homeService.reloadData()
                     }
                 }
                 return@launch
