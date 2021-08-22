@@ -74,6 +74,15 @@ class FileContainerService : ContainerService {
         homeService.reloadData()
     }
 
+    override fun loadContextRecord(
+        path: com.timecat.layout.ui.business.breadcrumb.Path,
+        context: Context,
+        parentUuid: String,
+        homeService: HomeService
+    ) {
+        homeService.loadContextRecord(null)
+    }
+
     override fun loadMoreForVirtualPath(context: Context, parentUuid: String, offset: Int, homeService: HomeService, callback: ContainerService.LoadMoreCallback) {
         callback.onVirtualLoadSuccess(listOf())
     }
