@@ -11,6 +11,7 @@ import com.timecat.element.alert.ToastUtil
 import com.timecat.identity.data.block.type.CONTAINER_BLOCK_MEDIA_MODULE_FILE
 import com.timecat.identity.readonly.RouterHub
 import com.timecat.layout.ui.layout.setShakelessClickListener
+import com.timecat.middle.block.ext.launch
 import com.timecat.middle.block.service.*
 import com.timecat.module.files.item.DirCard
 import com.timecat.module.files.item.FileCard
@@ -98,7 +99,7 @@ class FileContainerService : ContainerService {
     }
 
     private fun loadForFileDir(context: Context, parentUuid: Path, homeService: HomeService, callback: ContainerService.LoadCallback) {
-        GlobalScope.launch(Dispatchers.IO) {
+        context.launch(Dispatchers.IO) {
             val fileList = try {
                 LogUtil.se("start load files")
                 parentUuid.newDirectoryStream().use { directoryStream ->
@@ -216,7 +217,7 @@ class FileContainerService : ContainerService {
     }
 
     private fun loadForFileHome(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
-        GlobalScope.launch(Dispatchers.IO) {
+        context.launch(Dispatchers.IO) {
             val navigationCards = navigationFileItems.map {
                 NavigationCard(it, context, object : NavigationCard.Listener {
                     override fun loadFor(fileItem: FileItem) {

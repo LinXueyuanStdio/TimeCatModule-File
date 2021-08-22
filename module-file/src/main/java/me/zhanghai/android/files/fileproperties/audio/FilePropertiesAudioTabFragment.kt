@@ -8,8 +8,8 @@ package me.zhanghai.android.files.fileproperties.audio
 import android.os.Bundle
 import androidx.lifecycle.observe
 import java8.nio.file.Path
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.WriteWith
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.WriteWith
 import me.zhanghai.android.files.R
 import me.zhanghai.android.files.file.FileItem
 import me.zhanghai.android.files.file.format

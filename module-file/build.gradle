@@ -1,4 +1,5 @@
 apply from: "${project.rootDir}/gradle/library_header.gradle"
+apply plugin: 'kotlin-parcelize'
 
 //kapt {
 //    correctErrorTypes = true
@@ -13,16 +14,12 @@ android {
     buildFeatures {
         viewBinding true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-//        freeCompilerArgs += [
-//                '-Xopt-in=kotlin.RequiresOptIn',
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                '-Xopt-in=kotlin.RequiresOptIn',
 //                "-XXLanguage:+InlineClasses",
-//        ]
+        ]
     }
     externalNativeBuild {
         cmake {
@@ -64,7 +61,7 @@ dependencies {
     // 1.2.0-alpha01 breaks Design widgets in Theme.MaterialComponents.*.Bridge.
     // https://github.com/material-components/material-components-android/issues/740
     // TODO: Run `git revert 9fc8452` after upgrading to 1.2.0.
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
 
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
