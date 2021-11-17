@@ -52,7 +52,7 @@ import java.net.URI
  */
 private typealias Uuid = String
 
-private const val FileSchema = "|FILE|"
+private const val FileSchema = "world://timecat.local/"
 private fun Path.toUuid(): Uuid = "${FileSchema}${this.toUri()}"
 private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileSchema)))
 
