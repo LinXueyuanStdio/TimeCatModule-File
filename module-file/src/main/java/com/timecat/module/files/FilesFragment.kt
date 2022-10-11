@@ -214,17 +214,17 @@ class FilesFragment : BaseLazyLoadSupportFragment(),
                     animate().translationY(0f).alpha(1f).setDuration(200)
                         .setInterpolator(DecelerateInterpolator())
                         .setListener(object : Animator.AnimatorListener {
-                            override fun onAnimationRepeat(animation: Animator?) {
+                            override fun onAnimationRepeat(animation: Animator) {
                             }
 
-                            override fun onAnimationEnd(animation: Animator?) {
+                            override fun onAnimationEnd(animation: Animator) {
                                 binding.recyclerView.clipToPadding = true
                             }
 
-                            override fun onAnimationCancel(animation: Animator?) {
+                            override fun onAnimationCancel(animation: Animator) {
                             }
 
-                            override fun onAnimationStart(animation: Animator?) {
+                            override fun onAnimationStart(animation: Animator) {
                             }
                         })
                         .start()
@@ -240,16 +240,16 @@ class FilesFragment : BaseLazyLoadSupportFragment(),
                     animate().translationY(-height.toFloat()).alpha(0f).setDuration(200)
                         .setInterpolator(DecelerateInterpolator())
                         .setListener(object : Animator.AnimatorListener {
-                            override fun onAnimationRepeat(animation: Animator?) {
+                            override fun onAnimationRepeat(animation: Animator) {
                             }
 
-                            override fun onAnimationEnd(animation: Animator?) {
+                            override fun onAnimationEnd(animation: Animator) {
                             }
 
-                            override fun onAnimationCancel(animation: Animator?) {
+                            override fun onAnimationCancel(animation: Animator) {
                             }
 
-                            override fun onAnimationStart(animation: Animator?) {
+                            override fun onAnimationStart(animation: Animator) {
                                 binding.recyclerView.clipToPadding = false
                             }
                         })

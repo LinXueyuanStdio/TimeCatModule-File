@@ -78,7 +78,7 @@ class NonNegativeIntegerPreference : EditTextPreference {
 
     override fun shouldDisableDependents(): Boolean = !isEnabled
 
-    override fun onSaveInstanceState(): Parcelable {
+    override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
         if (isPersistent) {
             return superState

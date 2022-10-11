@@ -8,7 +8,6 @@ import com.timecat.component.commonsdk.utils.override.LogUtil
 import com.timecat.component.router.app.NAV
 import com.timecat.data.room.record.RoomRecord
 import com.timecat.element.alert.ToastUtil
-import com.timecat.identity.data.block.type.CONTAINER_BLOCK_MEDIA_MODULE_FILE
 import com.timecat.identity.readonly.RouterHub
 import com.timecat.layout.ui.layout.setShakelessClickListener
 import com.timecat.middle.block.ext.launch
@@ -53,8 +52,19 @@ import java.net.URI
 private typealias Uuid = String
 
 private const val FileSchema = "world://timecat.local/"
-private fun Path.toUuid(): Uuid = "${FileSchema}${this.toUri()}"
-private fun Uuid.toPath(): Path = Paths.get(URI.create(this.substringAfter(FileSchema)))
+private const val QUERY_path = "path"
+private fun Path.toUuid(): Uuid{
+    val uri = DNS.buildUri("timecat.local")
+        .appendQueryParameter(QUERY_path, "${this.toUri()}")
+        .appendQueryParameter(DNS.QUERY_Redirect, RouterHub.GLOBAL_FileContainerService)
+        .build()
+    return uri.toString()
+}
+private fun Uuid.toPath(): Path {
+    val uri = DNS.parse(this)
+    val path = uri.getQueryParameter(QUERY_path)
+    return Paths.get(URI.create(path))
+}
 
 @ServiceAnno(ContainerService::class, name = [RouterHub.GLOBAL_FileContainerService])
 class FileContainerService : ContainerService {
@@ -90,11 +100,13 @@ class FileContainerService : ContainerService {
 
 
     override fun loadForVirtualPath(context: Context, parentUuid: String, homeService: HomeService, callback: ContainerService.LoadCallback) {
-        if (parentUuid.startsWith(FileSchema)) {
+        val uri = DNS.parse(parentUuid)
+        val pathStr = uri.getQueryParameter(QUERY_path)
+        if (pathStr.isNullOrEmpty()) {
+            loadForFileHome(context, parentUuid, homeService, callback)
+        } else {
             val path = parentUuid.toPath()
             loadForFileDir(context, path, homeService, callback)
-        } else {
-            loadForFileHome(context, parentUuid, homeService, callback)
         }
     }
 
@@ -138,7 +150,7 @@ class FileContainerService : ContainerService {
                     DirCard(it, context, object : DirCard.Listener {
                         override fun loadFor(fileItem: me.zhanghai.android.files.file.FileItem) {
                             val uuid = fileItem.path.toUuid()
-                            homeService.navigateTo(fileItem.name, uuid, CONTAINER_BLOCK_MEDIA_MODULE_FILE)
+                            homeService.navigateTo(fileItem.name, uuid)
                         }
                     })
                 else
@@ -222,7 +234,7 @@ class FileContainerService : ContainerService {
                 NavigationCard(it, context, object : NavigationCard.Listener {
                     override fun loadFor(fileItem: FileItem) {
                         val uuid = fileItem.path.toUuid()
-                        homeService.navigateTo(fileItem.getTitle(context), uuid, CONTAINER_BLOCK_MEDIA_MODULE_FILE)
+                        homeService.navigateTo(fileItem.getTitle(context), uuid)
                     }
                 })
             }

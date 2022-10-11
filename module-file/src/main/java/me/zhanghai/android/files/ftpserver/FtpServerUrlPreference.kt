@@ -124,7 +124,7 @@ class FtpServerUrlPreference : Preference {
                 .apply {
                     add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.ftp_server_url_menu_copy_url)
                         .setOnMenuItemClickListener {
-                            clipboardManager.copyText(url, context)
+                            url?.let { it1 -> clipboardManager.copyText(it1, context) }
                             true
                         }
                 }

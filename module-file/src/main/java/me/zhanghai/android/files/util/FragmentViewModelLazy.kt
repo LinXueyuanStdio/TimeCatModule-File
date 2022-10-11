@@ -16,12 +16,12 @@ inline fun <reified VM : ViewModel> Fragment.viewModels(
     noinline factoryProducer: (() -> () -> VM)? = null
 ) = viewModels<VM>(
     ownerProducer,
-    factoryProducer?.let {
+    factoryProducer = factoryProducer?.let {
         {
             val factory = it()
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel?> create(modelClass: Class<T>) = factory() as T
+                override fun <T : ViewModel> create(modelClass: Class<T>) = factory() as T
             }
         }
     }

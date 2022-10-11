@@ -26,6 +26,7 @@ android {
             path 'CMakeLists.txt'
         }
     }
+    namespace 'me.zhanghai.android.files'
 }
 
 dependencies {
